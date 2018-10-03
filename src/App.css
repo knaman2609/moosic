@@ -1,32 +1,65 @@
-.App {
-  text-align: center;
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+html, body, #root {
+    height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.Main {
+    background: #CDD5F9;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.App-link {
-  color: #61dafb;
+.PlayerContainer {
+    width: 300px;
+    height: 500px;
+    background: #ffccff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.PlayerDisplay {
+    height: 380px;
+    background: #ffccdd;
 }
+
+.PlayerControls {
+    height: 120px;
+    background: #ffffff;
+    padding: 10px;
+}
+
+.TimeView {
+    text-align: right;
+    height: 20px;
+    font-size: 14px;
+}
+
+.PlayerControlsPanel {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.ShuffleIcon, .RepeatIcon {
+    width: 30px;
+    margin: auto;
+}
+
+.PrevIcon, .NextIcon {
+    width: 20px;
+    margin: auto;
+}
+
+.PlayIcon {
+    width: 40px;
+    margin: auto;
+}
+
