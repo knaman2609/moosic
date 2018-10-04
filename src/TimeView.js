@@ -8,7 +8,8 @@ class TimeView extends Component {
   render() {
     return (
       <div className="TimeView">
-        1.22 / 4.02
+        <img className="MoreIcon" src="ic_more.png" onClick={this.props.onMoreClick}/>
+        <span>1.22 / 4.02</span>
       </div>
     );
   }

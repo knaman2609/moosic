@@ -10,7 +10,7 @@ class PlayerControls extends Component {
   render() {
     return (
       <div className="PlayerControls">
-        <TimeView/>
+        <TimeView onMoreClick = {this.props.onMoreClick}/>
         <div className="PlayerControlsPanel">
           <img className="ShuffleIcon" src="ic_shuffle.png"/>
           <img className="PrevIcon" src="ic_prev_song.png"/>
