@@ -5,6 +5,29 @@ import './App.css';
 
 class PlayerControls extends Component {
   componentWillMount() {
+    this.setState ({
+      playing: false
+    });
+  }
+
+  handlePlayClick = () =>{
+    this.props.onPlay(!this.state.playing);
+
+    this.setState({
+      playing: !this.state.playing
+    });
+  }
+
+  renderPlayIcon = () =>{
+    if (this.state.playing) {
+      return (
+        <img onClick={this.handlePlayClick} className="PlayIcon" src="ic_pause.png"/>
+      )
+    } else {
+      return (
+        <img onClick={this.handlePlayClick} className="PlayIcon" src="ic_play.png"/>
+      )
+    }
   }
 
   render() {
@@ -14,7 +37,7 @@ class PlayerControls extends Component {
         <div className="PlayerControlsPanel">
           <img className="ShuffleIcon" src="ic_shuffle.png"/>
           <img className="PrevIcon" src="ic_prev_song.png"/>
-          <img className="PlayIcon" src="ic_play.png"/>
+          {this.renderPlayIcon()}
           <img className="NextIcon" src="ic_next_song.png"/>
           <img className="RepeatIcon" src="ic_repeat.png"/>
         </div>
