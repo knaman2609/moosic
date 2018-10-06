@@ -5,21 +5,14 @@ import './App.css';
 
 class PlayerControls extends Component {
   componentWillMount() {
-    this.setState ({
-      playing: false
-    });
   }
 
   handlePlayClick = () =>{
-    this.props.onPlay(!this.state.playing);
-
-    this.setState({
-      playing: !this.state.playing
-    });
+    this.props.onPlay();
   }
 
   renderPlayIcon = () =>{
-    if (this.state.playing) {
+    if (this.props.isPlaying) {
       return (
         <img onClick={this.handlePlayClick} className="PlayIcon" src="ic_pause.png"/>
       )

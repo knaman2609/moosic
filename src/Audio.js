@@ -1,13 +1,34 @@
 import React, { Component } from 'react';
 
-class App extends Component {
+class Audio extends Component {
+  componentWillMount() {
+    this.toggle = false;
+  }
+
+  componentWillReceiveProps (props) {
+    if (this.props.songName !== props.songName) {
+      this.toggle = !this.toggle;
+    }
+  }
+
   render(){
-    return (
-      <audio controls="controls" style={{display:"none"}}>
-		    <source src={this.props.songName} type="audio/mpeg"/>
-	    </audio>
-    );
+    if (this.toggle) {
+      return (
+        <audio controls="controls" style={{display:"none"}}>
+          <source src={this.props.songName} type="audio/mpeg"/>
+        </audio>
+      );
+    } else {
+      return (
+        <div>
+          <audio controls="controls" style={{display:"none"}}>
+            <source src={this.props.songName} type="audio/mpeg"/>
+          </audio>
+        </div>
+      );
+    }
+
   }
 }
 
-export default App;
+export default Audio;

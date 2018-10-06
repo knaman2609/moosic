@@ -21,7 +21,7 @@ html, body, #root {
     position: absolute;
     width: 300px;
     height: 500px;
-    background: #ffccff;
+    background: #42486e;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -39,6 +39,7 @@ html, body, #root {
     font-size: 20px;
     font-weight: bold;
     color: #ffffff;
+
 }
 
 .PlayerDisplay .ArtistName {
@@ -101,6 +102,9 @@ html, body, #root {
 
 .PlayListItem .SongName {
     font-weight: bold;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .PlayListItem .ArtistName {

@@ -9,13 +9,18 @@ import './App.css';
 class App extends Component {
   componentWillMount() {
     this.setState(
-      {playListVisible: false}
+      {
+        playListVisible: false,
+        playing: false,
+        songName: "",
+        songList: []
+      }
     );
   }
 
   renderPlayList() {
     if (this.state.playListVisible) {
-      return <PlayList onCloseClick={this.hidePlayList}/>
+      return <PlayList list={this.state.songList} onSongSelect={this.updateCurrentSong}/>
     } else {
       return <div/>
     }
@@ -29,27 +34,69 @@ class App extends Component {
     this.setState({playListVisible: false});
   }
 
-  playSlelectedSong = (playing) => {
+  updateCurrentSong = (songName) => {
+    var _this = this;
+
+    this.setState({
+      songName: songName,
+      playing: false
+    });
+
+    this.hidePlayList();
+
+    setTimeout(function() {
+      _this.playSlelectedSong();
+    },0);
+  }
+
+  playSlelectedSong = () => {
     var player = document.getElementsByTagName("audio")[0];
 
-    if (playing) {
+    if (!this.state.playing) {
       player.play();
     } else {
       player.pause();
     }
+
+    this.setState({playing: !this.state.playing});
+  }
+
+  handleFileSelect = (event) => {
+    var songList = [];
+
+    Array.prototype.forEach.call(event.target.files, function(song) {
+      songList.push(
+        {
+          song: song.name,
+          artist: "Coldplay",
+          duration: "1:00"
+        }
+      );
+    });
+
+    this.setState({
+      songList: songList
+    });
+
+    var fileInput = document.getElementsByTagName("input")[0];
+
+    fileInput.style.display = "none";
   }
 
   render() {
     return (
       <div className="Main">
         <div className="PlayerContainer">
-          <PlayerDisplay/>
+          <input onChange={this.handleFileSelect} type="file" multiple/>
+          <PlayerDisplay songName={this.state.songName}/>
           <PlayerControls
+            isPlaying={this.state.playing}
             onMoreClick={this.showPlayList}
             onPlay={this.playSlelectedSong}
             />
           {this.renderPlayList()}
-          <Audio songName="Coldplay - Adventure Of A Lifetime (Official Video).mp3"/>
+
+          <Audio songName={this.state.songName}/>
         </div>
       </div>
     );
