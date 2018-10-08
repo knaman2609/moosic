@@ -1,13 +1,26 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+
 import PlayerDisplay  from './PlayerDisplay';
 import PlayerControls  from './PlayerControls';
 import PlayList  from './PlayList';
 import Audio  from './Audio';
+import Actions  from './Actions'
+
 
 import './App.css';
 
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    player: state
+  }
+}
+const mapDispatchToProps = dispatch =>  Actions(dispatch)
+
 class App extends Component {
   componentWillMount() {
+
     this.setState(
       {
         playListVisible: false,
@@ -67,7 +80,7 @@ class App extends Component {
     Array.prototype.forEach.call(event.target.files, function(song) {
       songList.push(
         {
-          song: song.name,
+          songName: song.name,
           artist: "Coldplay",
           duration: "1:00"
         }
@@ -84,16 +97,20 @@ class App extends Component {
   }
 
   render() {
+
     return (
       <div className="Main">
         <div className="PlayerContainer">
           <input onChange={this.handleFileSelect} type="file" multiple/>
+
           <PlayerDisplay songName={this.state.songName}/>
+
           <PlayerControls
             isPlaying={this.state.playing}
             onMoreClick={this.showPlayList}
             onPlay={this.playSlelectedSong}
             />
+
           {this.renderPlayList()}
 
           <Audio songName={this.state.songName}/>
@@ -103,4 +120,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)

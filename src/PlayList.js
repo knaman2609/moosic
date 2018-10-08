@@ -6,13 +6,13 @@ class PlayListItem extends Component {
   }
 
   handleSongSlect =() => {
-    this.props.onSongSelect(this.props.song);
+    this.props.onSongSelect(this.props.songName);
   }
 
   render() {
     return (
       <div className="PlayListItem" onClick={this.handleSongSlect}>
-        <div className="SongName">{this.props.song}</div>
+        <div className="SongName">{this.props.songName}</div>
         <div className="ArtistName">{this.props.artist}</div>
         <div className="Duration">{this.props.duration}</div>
         <div className="Separator"/>
@@ -34,7 +34,7 @@ class PlayList extends Component {
         key = {index}
         onSongSelect = {_this.props.onSongSelect}
         duration={music.duration}
-        song = {music.song}
+        songName = {music.songName}
         artist = {music.artist}/>
     });
   }
