@@ -1,29 +1,37 @@
-function getData(songName) {
-  if (!songName)
-    return "0:00";
+function getDuration(songName) {
+  var promise = new Promise(function(resolve, reject){
+    if (!songName)
+      return resolve(4000);
 
-  var  audioCtx = new AudioContext();
-  var source = audioCtx.createBufferSource();
-  var request = new XMLHttpRequest();
+    var audioCtx = new AudioContext();
+    var source = audioCtx.createBufferSource();
+    var request = new XMLHttpRequest();
 
-  request.open('GET', songName, true);
-  request.responseType = 'arraybuffer';
+    request.open('GET', songName, true);
+    request.responseType = 'arraybuffer';
 
 
-  request.onload = function() {
-    var audioData = request.response;
+    request.onload = function() {
+      var audioData = request.response;
 
-    audioCtx.decodeAudioData(audioData, function(buffer) {
-      source.buffer = buffer;
-      console.log(source.buffer.duration);
-      source.connect(audioCtx.destination);
-      source.loop = true;
-    },
+      audioCtx.decodeAudioData(audioData, function(buffer) {
+        source.buffer = buffer;
+        resolve(source.buffer.duration);
+      },
 
-    function(e){
-      console.log("Error with decoding audio data" + e.err);
-    });
-  }
+      function(e){
+        reject(e.err);
+        console.log("Error with decoding audio data" + e.err);
+      });
+    }
 
-  request.send();
+    request.send();
+  });
+
+
+  return promise;
+}
+
+export {
+  getDuration
 }

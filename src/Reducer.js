@@ -1,8 +1,20 @@
-const player = (state = "u2" , action) => {
-  switch(action.type) {
-    case "play":
-      return action.payload;
+import * as R from "ramda"
 
+var AppState = {
+  songList: []
+}
+
+const player = (state = AppState , action) => {
+  switch(action.type) {
+    case "FETCH_SONGS":
+      var newState = {}
+      newState.songList = action.payload;
+      return R.merge(state, newState);
+
+  case "UPDATE_SONGS":
+    var newState = {}
+    newState.songList = action.payload;
+    return R.merge(state, newState);
   }
 
   return state;

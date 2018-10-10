@@ -26,14 +26,13 @@ class App extends Component {
         playListVisible: false,
         playing: false,
         songName: "",
-        songList: []
       }
     );
   }
 
   renderPlayList() {
     if (this.state.playListVisible) {
-      return <PlayList list={this.state.songList} onSongSelect={this.updateCurrentSong}/>
+      return <PlayList list={this.props.player.songList} onSongSelect={this.updateCurrentSong}/>
     } else {
       return <div/>
     }
@@ -75,24 +74,9 @@ class App extends Component {
   }
 
   handleFileSelect = (event) => {
-    var songList = [];
-
-    Array.prototype.forEach.call(event.target.files, function(song) {
-      songList.push(
-        {
-          songName: song.name,
-          artist: "Coldplay",
-          duration: "1:00"
-        }
-      );
-    });
-
-    this.setState({
-      songList: songList
-    });
+    this.props.fetchSongs(event);
 
     var fileInput = document.getElementsByTagName("input")[0];
-
     fileInput.style.display = "none";
   }
 

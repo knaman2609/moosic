@@ -1,7 +1,49 @@
-export default function(dispatch){
+import {getDuration} from "./Utils";
+
+function fetchSongs(dispatch) {
+  return function(event){
+    var songList = [];
+    var promiseList = [];
+
+    Array.prototype.forEach.call(event.target.files, function(song) {
+      songList.push(
+        {
+          songName: song.name,
+          artist: "Coldplay",
+          duration: ".."
+        }
+      );
+
+      promiseList.push(getDuration(song.name));
+    });
+
+    dispatch({
+      type: "FETCH_SONGS",
+      payload: songList
+    });
+
+    Promise.all(promiseList).then(function(values) {
+      songList.forEach(function(song, index) {
+        var time  = Math.ceil(values[index]);
+        var minutes = Math.floor(time / 60);
+        var seconds = time - minutes * 60;
+
+        if (seconds < 10)
+          seconds = "0" + seconds;
+
+        song.duration = minutes + ":" + seconds;
+      });
+
+      dispatch({
+        type: "UPDATE_SONGS",
+        payload: songList
+      });
+    });
+  }
+}
+
+export default function(dispatch) {
   return {
-    doThis: function(action) {
-      dispatch({"payload": "coldplay", type: "play"});
-    }
+    fetchSongs: fetchSongs(dispatch)
   }
 }
