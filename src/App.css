@@ -72,16 +72,19 @@ html, body, #root {
 .ShuffleIcon, .RepeatIcon {
     width: 30px;
     margin: auto;
+    visibility: hidden;
 }
 
 .PrevIcon, .NextIcon {
     width: 20px;
     margin: auto;
+    cursor: pointer;
 }
 
 .PlayIcon {
     width: 40px;
     margin: auto;
+    cursor: pointer;
 }
 
 .PlayList {
@@ -130,4 +133,5 @@ html, body, #root {
     width: 16px;
     vertical-align: middle;
     margin-right: 5px;
+    cursor: pointer;
 }

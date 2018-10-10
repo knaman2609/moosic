@@ -8,7 +8,7 @@ function fetchSongs(dispatch) {
     Array.prototype.forEach.call(event.target.files, function(song) {
       songList.push(
         {
-          songName: song.name,
+          name: song.name,
           artist: "Coldplay",
           duration: ".."
         }
@@ -31,6 +31,7 @@ function fetchSongs(dispatch) {
         if (seconds < 10)
           seconds = "0" + seconds;
 
+        song.durationInSeconds = time;
         song.duration = minutes + ":" + seconds;
       });
 

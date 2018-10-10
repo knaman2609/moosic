@@ -25,7 +25,7 @@ class App extends Component {
       {
         playListVisible: false,
         playing: false,
-        songName: "",
+        song: {name: "", duration: "0:00", durationInSeconds: 0}
       }
     );
   }
@@ -46,11 +46,11 @@ class App extends Component {
     this.setState({playListVisible: false});
   }
 
-  updateCurrentSong = (songName) => {
+  updateCurrentSong = (song) => {
     var _this = this;
 
     this.setState({
-      songName: songName,
+      song: song,
       playing: false
     });
 
@@ -87,9 +87,10 @@ class App extends Component {
         <div className="PlayerContainer">
           <input onChange={this.handleFileSelect} type="file" multiple/>
 
-          <PlayerDisplay songName={this.state.songName}/>
+          <PlayerDisplay songName={this.state.song.name}/>
 
           <PlayerControls
+            song={this.state.song}
             isPlaying={this.state.playing}
             onMoreClick={this.showPlayList}
             onPlay={this.playSlelectedSong}
@@ -97,7 +98,7 @@ class App extends Component {
 
           {this.renderPlayList()}
 
-          <Audio songName={this.state.songName}/>
+          <Audio songName={this.state.song.name}/>
         </div>
       </div>
     );

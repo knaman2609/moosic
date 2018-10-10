@@ -6,15 +6,15 @@ class PlayListItem extends Component {
   }
 
   handleSongSlect =() => {
-    this.props.onSongSelect(this.props.songName);
+    this.props.onSongSelect(this.props.song);
   }
 
   render() {
     return (
       <div className="PlayListItem" onClick={this.handleSongSlect}>
-        <div className="SongName">{this.props.songName}</div>
-        <div className="ArtistName">{this.props.artist}</div>
-        <div className="Duration">{this.props.duration}</div>
+        <div className="SongName">{this.props.song.name}</div>
+        <div className="ArtistName">{this.props.song.artist}</div>
+        <div className="Duration">{this.props.song.duration}</div>
         <div className="Separator"/>
       </div>
     );
@@ -29,13 +29,11 @@ class PlayList extends Component {
     var _this = this;
 
     return this.props.list
-      .map(function(music, index) {
+      .map(function(song, index) {
         return <PlayListItem
         key = {index}
         onSongSelect = {_this.props.onSongSelect}
-        duration={music.duration}
-        songName = {music.songName}
-        artist = {music.artist}/>
+        song = {song} />
     });
   }
 
