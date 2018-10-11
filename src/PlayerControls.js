@@ -28,6 +28,8 @@ class PlayerControls extends Component {
       <div className="PlayerControls">
 
         <TimeView
+          onSongFinished={this.props.onSongFinished}
+          isPlaying = {this.props.isPlaying}
           song = {this.props.song}
           onMoreClick = {this.props.onMoreClick}/>
 

@@ -24,7 +24,7 @@ class App extends Component {
     this.setState(
       {
         playListVisible: false,
-        playing: false,
+        isPlaying: false,
         song: {name: "", duration: "0:00", durationInSeconds: 0}
       }
     );
@@ -51,7 +51,7 @@ class App extends Component {
 
     this.setState({
       song: song,
-      playing: false
+      isPlaying: false
     });
 
     this.hidePlayList();
@@ -64,13 +64,13 @@ class App extends Component {
   playSlelectedSong = () => {
     var player = document.getElementsByTagName("audio")[0];
 
-    if (!this.state.playing) {
+    if (!this.state.isPlaying) {
       player.play();
     } else {
       player.pause();
     }
 
-    this.setState({playing: !this.state.playing});
+    this.setState({isPlaying: !this.state.isPlaying});
   }
 
   handleFileSelect = (event) => {
@@ -78,6 +78,15 @@ class App extends Component {
 
     var fileInput = document.getElementsByTagName("input")[0];
     fileInput.style.display = "none";
+  }
+
+  handleSongFinished = () => {
+    var player = document.getElementsByTagName("audio")[0];
+
+    player.pause();
+    console.log("handleSongFinished");
+
+    this.setState({ isPlaying: false});
   }
 
   render() {
@@ -90,8 +99,9 @@ class App extends Component {
           <PlayerDisplay songName={this.state.song.name}/>
 
           <PlayerControls
+            onSongFinished={this.handleSongFinished}
             song={this.state.song}
-            isPlaying={this.state.playing}
+            isPlaying={this.state.isPlaying}
             onMoreClick={this.showPlayList}
             onPlay={this.playSlelectedSong}
             />

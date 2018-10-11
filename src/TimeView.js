@@ -8,43 +8,77 @@ class TimeView extends Component {
       currDuration: "0:00",
     });
 
-    this.restartTimer = true;
+    this.newSong = true;
     this.timerId = null;
   }
 
   componentWillReceiveProps(props) {
     if (this.props.song.name != props.song.name) {
-      this.restartTimer = true;
-      this.state.currDuration = 0;
-      this.state.currDurationInSeconds = 0;
-      this.state.currDuration = "0:00";
-      clearInterval(this.timerId);
+      console.log("resetTimer");
+      this.resetTimer();
     } else {
-      this.restartTimer = false;
+      console.log("oldSong");
+      this.newSong = false;
+    }
+
+    if (props.isPlaying) {
+      console.log("startTimer");
+      this.startTimer();
+    } else if (!props.isPlaying) {
+      console.log("stopTimer");
+      this.stopTimer();
     }
   }
 
-  render() {
+  resetTimer() {
+    this.newSong = true;
+    this.state.currDuration = 0;
+    this.state.currDurationInSeconds = 0;
+    this.state.currDuration = "0:00";
+    this.stopTimer();
+  }
+
+  startTimer() {
+    if (this.timerId)
+      return;
+
+    console.log("timerStarted");
     var _this = this;
 
-    if (this.restartTimer && this.props.song.durationInSeconds > 0) {
-      _this.timerId = setInterval(function() {
-        if (_this.state.currDurationInSeconds > _this.props.song.durationInSeconds) {
-          clearInterval(_this.timerId);
-        }
+    _this.timerId = setInterval(function() {
+      if (_this.state.currDurationInSeconds >= _this.props.song.durationInSeconds) {
+        _this.resetTimer();
+        _this.props.onSongFinished();
+      }
 
-        var time  = _this.state.currDurationInSeconds;
-        var minutes = Math.floor(time / 60);
-        var seconds = time - minutes * 60;
+      var time  = _this.state.currDurationInSeconds;
+      var minutes = Math.floor(time / 60);
+      var seconds = time - minutes * 60;
 
-        if (seconds < 10)
-          seconds = "0" + seconds;
+      if (seconds < 10)
+        seconds = "0" + seconds;
 
-        _this.setState({
-          currDuration: minutes + ":" + seconds,
-          currDurationInSeconds: time + 1
-        })
-      }, 1000);
+      _this.setState({
+        currDuration: minutes + ":" + seconds,
+        currDurationInSeconds: time + 1
+      })
+    }, 1000);
+  }
+
+  stopTimer() {
+    if (!this.timerId)
+      return;
+
+
+    console.log("timerStopped");
+    clearInterval(this.timerId);
+    this.timerId = null;
+  }
+
+  render() {
+    if (this.newSong &&
+        this.props.song.durationInSeconds > 0) {
+      this.startTimer();
     }
 
     return (
