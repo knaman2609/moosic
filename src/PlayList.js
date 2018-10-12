@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import './PlayList.css';
 
 class PlayListItem extends Component {
   componentWillMount() {
@@ -39,8 +39,17 @@ class PlayList extends Component {
 
   render() {
     return (
-      <div className="PlayList" >
-        {this.renderPlayListItems()}
+      <div className="PlayListContainer" >
+        <div className="PlayListBackground"/>
+
+        <div className="PlayListView">
+          <img onClick={this.props.onClose} className="HideSongs" src="ic_hide_songs.png"/>
+
+          <div className="PlayList">
+            {this.renderPlayListItems()}
+          </div>
+        </div>
+
       </div>
     );
   }

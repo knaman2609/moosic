@@ -1,0 +1,71 @@
+.PlayListContainer {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    padding-top: 100px;
+}
+
+.PlayListView {
+    height: 100%;
+    padding-top: 30px;
+    position: relative;
+    background: #ffffff;
+}
+
+.PlayListBackground {
+    height: 100%;
+    background: #000000;
+    opacity: 0.5;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+}
+
+.PlayList {
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.PlayListContainer .HideSongs {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.PlayListItem {
+    height: 60px;
+    padding: 10px;
+    padding-right: 50px;
+    position: relative;
+    cursor: pointer;
+}
+
+.PlayListItem .SongName {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.PlayListItem .ArtistName {
+    font-size: 14px;
+}
+
+.PlayListItem .Duration {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 13px;
+}
+
+.PlayListItem .Separator {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
+    border-bottom: 0.1px solid #cccccc;
+}
+

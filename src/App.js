@@ -16,6 +16,7 @@ const mapStateToProps = (state, ownProps) => {
     player: state
   }
 }
+
 const mapDispatchToProps = dispatch =>  Actions(dispatch)
 
 class App extends Component {
@@ -28,14 +29,6 @@ class App extends Component {
         song: {name: "", duration: "0:00", durationInSeconds: 0}
       }
     );
-  }
-
-  renderPlayList() {
-    if (this.state.playListVisible) {
-      return <PlayList list={this.props.player.songList} onSongSelect={this.updateCurrentSong}/>
-    } else {
-      return <div/>
-    }
   }
 
   showPlayList = () => {
@@ -89,26 +82,42 @@ class App extends Component {
     this.setState({ isPlaying: false});
   }
 
+  renderPlayList() {
+    if (this.state.playListVisible) {
+      return <PlayList
+      onClose={this.hidePlayList}
+      list={this.props.player.songList}
+      onSongSelect={this.updateCurrentSong}/>
+
+    } else {
+      return <div/>
+    }
+  }
+
+
   render() {
 
     return (
-      <div className="Main">
-        <div className="PlayerContainer">
-          <input onChange={this.handleFileSelect} type="file" multiple/>
+      <div className="MainContainer">
+        <input onChange={this.handleFileSelect} type="file" multiple/>
 
-          <PlayerDisplay songName={this.state.song.name}/>
+        <div className="MainView">
+          <div className="PlayerContainer">
 
-          <PlayerControls
-            onSongFinished={this.handleSongFinished}
-            song={this.state.song}
-            isPlaying={this.state.isPlaying}
-            onMoreClick={this.showPlayList}
-            onPlay={this.playSlelectedSong}
-            />
+            <PlayerDisplay songName={this.state.song.name}/>
 
-          {this.renderPlayList()}
+            <PlayerControls
+              onSongFinished={this.handleSongFinished}
+              song={this.state.song}
+              isPlaying={this.state.isPlaying}
+              onMoreClick={this.showPlayList}
+              onPlay={this.playSlelectedSong}
+              />
 
-          <Audio songName={this.state.song.name}/>
+            {this.renderPlayList()}
+
+            <Audio songName={this.state.song.name}/>
+          </div>
         </div>
       </div>
     );
