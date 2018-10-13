@@ -43,6 +43,9 @@ class App extends Component {
   runPlayer = () => {
     var player = document.getElementsByTagName("audio")[0];
 
+    if (!this.state.song.name)
+      return;
+
     if (!this.state.isPlaying) {
       player.play();
     } else {

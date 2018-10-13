@@ -6,8 +6,11 @@ class Progress extends Component {
   }
 
   render() {
-    var boxWidth = Math.floor((300/this.props.total));
-    var boxToLightUp = this.props.value*boxWidth;
+    var boxWidth = ((300/this.props.total)).toFixed(2);
+    var boxToLightUp = (this.props.value*boxWidth).toFixed(2);
+
+    if (this.props.total == this.props.value)
+      boxToLightUp = 300;
 
     return (
       <div className="ProgressContainer">

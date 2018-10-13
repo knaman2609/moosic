@@ -114,4 +114,5 @@ html, body, #root {
     height: 5px;
     background: #d0f8ff;
     width: 0px;
+    transition: width 0.2s linear;
 }

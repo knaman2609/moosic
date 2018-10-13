@@ -51,6 +51,7 @@ class TimeView extends Component {
       if (_this.state.currDurationInSeconds >= _this.props.song.durationInSeconds) {
         _this.resetTimer();
         _this.props.onSongFinished();
+        return;
       }
 
       var time  = _this.state.currDurationInSeconds;
