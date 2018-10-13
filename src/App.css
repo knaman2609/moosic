@@ -25,11 +25,13 @@ html, body, #root {
     position: absolute;
     width: 300px;
     height: 500px;
-    background: #008097;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .PlayerDisplay {
+    background-image: url("/coldplay.png");
+    background-position: center;
+    background-size: cover;
     height: 380px;
     position: relative;
 }
@@ -56,13 +58,6 @@ html, body, #root {
 .PlayerControls {
     height: 120px;
     background: #ffffff;
-    padding: 10px;
-}
-
-.TimeView {
-    text-align: right;
-    height: 20px;
-    font-size: 14px;
 }
 
 .PlayerControlsPanel {
@@ -90,9 +85,33 @@ html, body, #root {
     cursor: pointer;
 }
 
+.TimeViewContainer {
+    text-align: right;
+    height: 25px;
+    font-size: 14px;
+}
+
+.TimeView {
+    position: relative;
+    padding-top: 5px;
+    padding-right: 5px;
+}
+
 .TimeView .MoreIcon {
     width: 16px;
-    vertical-align: middle;
-    margin-right: 5px;
+    position: absolute;
+    right: 85px;
+    top: 6px;
     cursor: pointer;
+}
+
+.ProgressContainer {
+    height: 5px;
+    background: #6aa9b5;
+}
+
+.ProgressView {
+    height: 5px;
+    background: #d0f8ff;
+    width: 0px;
 }

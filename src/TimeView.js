@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Progress from './Progress'
+
 import './App.css';
 
 class TimeView extends Component {
@@ -82,9 +84,15 @@ class TimeView extends Component {
     }
 
     return (
-      <div className="TimeView">
-        <img className="MoreIcon" src="ic_more.png" onClick={this.props.onMoreClick}/>
-        <span> {this.state.currDuration} / {this.props.song.duration}</span>
+      <div className="TimeViewContainer">
+        <Progress
+          total={this.props.song.durationInSeconds}
+          value={this.state.currDurationInSeconds}/>
+
+        <div className="TimeView">
+          <img className="MoreIcon" src="ic_more.png" onClick={this.props.onMoreClick}/>
+          <span style={{display: "inlineBock", width: "80px"}}> {this.state.currDuration} / {this.props.song.duration}</span>
+        </div>
       </div>
     );
   }

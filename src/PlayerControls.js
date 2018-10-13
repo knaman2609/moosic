@@ -34,12 +34,14 @@ class PlayerControls extends Component {
           onMoreClick = {this.props.onMoreClick}/>
 
         <div className="PlayerControlsPanel">
+
           <img className="ShuffleIcon" src="ic_shuffle.png"/>
-          <img className="PrevIcon" src="ic_prev_song.png"/>
+
+          <img onClick={this.props.onPrev} className="PrevIcon" src="ic_prev_song.png"/>
 
           {this.renderPlayIcon()}
 
-          <img className="NextIcon" src="ic_next_song.png"/>
+          <img onClick={this.props.onNext} className="NextIcon" src="ic_next_song.png"/>
           <img className="RepeatIcon" src="ic_repeat.png"/>
         </div>
       </div>

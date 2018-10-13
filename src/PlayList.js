@@ -6,7 +6,7 @@ class PlayListItem extends Component {
   }
 
   handleSongSlect =() => {
-    this.props.onSongSelect(this.props.song);
+    this.props.onSongSelect(this.props.song, this.props.songIndex);
   }
 
   render() {
@@ -32,6 +32,7 @@ class PlayList extends Component {
       .map(function(song, index) {
         return <PlayListItem
         key = {index}
+        songIndex={index}
         onSongSelect = {_this.props.onSongSelect}
         song = {song} />
     });

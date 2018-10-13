@@ -26,7 +26,8 @@ class App extends Component {
       {
         playListVisible: false,
         isPlaying: false,
-        song: {name: "", duration: "0:00", durationInSeconds: 0}
+        song: {name: "", duration: "0:00", durationInSeconds: 0},
+        currentSongIndex: 0,
       }
     );
   }
@@ -39,22 +40,7 @@ class App extends Component {
     this.setState({playListVisible: false});
   }
 
-  updateCurrentSong = (song) => {
-    var _this = this;
-
-    this.setState({
-      song: song,
-      isPlaying: false
-    });
-
-    this.hidePlayList();
-
-    setTimeout(function() {
-      _this.playSlelectedSong();
-    },0);
-  }
-
-  playSlelectedSong = () => {
+  runPlayer = () => {
     var player = document.getElementsByTagName("audio")[0];
 
     if (!this.state.isPlaying) {
@@ -82,21 +68,54 @@ class App extends Component {
     this.setState({ isPlaying: false});
   }
 
+  handleNextClick = () => {
+    var nextSongIndex = this.state.currentSongIndex + 1;
+    var nextSong = this.props.player.songList[nextSongIndex];
+
+    if (nextSong)
+    this.updateCurrentSong(nextSong , nextSongIndex);
+  }
+
+  handlePrevClick = () => {
+    var prevSongIndex = this.state.currentSongIndex - 1;
+    var prevSong = this.props.player.songList[prevSongIndex];
+
+    if (prevSong)
+    this.updateCurrentSong(prevSong , prevSongIndex);
+  }
+
+  updateCurrentSong = (song, songIndex) => {
+    var _this = this;
+
+    this.setState({
+      song: song,
+      isPlaying: false,
+      currentSongIndex: songIndex,
+    });
+
+    setTimeout(function() {
+      _this.runPlayer();
+    },0);
+  }
+
+  handlePlayListClick = (song, songIndex) => {
+    this.updateCurrentSong(song, songIndex);
+    this.hidePlayList();
+  }
+
   renderPlayList() {
     if (this.state.playListVisible) {
       return <PlayList
       onClose={this.hidePlayList}
       list={this.props.player.songList}
-      onSongSelect={this.updateCurrentSong}/>
+      onSongSelect={this.handlePlayListClick}/>
 
     } else {
       return <div/>
     }
   }
 
-
   render() {
-
     return (
       <div className="MainContainer">
         <input onChange={this.handleFileSelect} type="file" multiple/>
@@ -107,11 +126,14 @@ class App extends Component {
             <PlayerDisplay songName={this.state.song.name}/>
 
             <PlayerControls
-              onSongFinished={this.handleSongFinished}
               song={this.state.song}
               isPlaying={this.state.isPlaying}
+
+              onSongFinished={this.handleSongFinished}
               onMoreClick={this.showPlayList}
-              onPlay={this.playSlelectedSong}
+              onPlay={this.runPlayer}
+              onNext={this.handleNextClick}
+              onPrev={this.handlePrevClick}
               />
 
             {this.renderPlayList()}
