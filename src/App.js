@@ -64,11 +64,16 @@ class App extends Component {
 
   handleSongFinished = () => {
     var player = document.getElementsByTagName("audio")[0];
+    var _this = this;
 
     player.pause();
     console.log("handleSongFinished");
 
     this.setState({ isPlaying: false});
+
+    setTimeout(function() {
+      _this.handleNextClick();
+    }, 1000);
   }
 
   handleNextClick = () => {

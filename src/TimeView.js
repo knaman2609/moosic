@@ -24,10 +24,10 @@ class TimeView extends Component {
     }
 
     if (props.isPlaying) {
-      console.log("startTimer");
+      console.log("startTimer attempted");
       this.startTimer();
     } else if (!props.isPlaying) {
-      console.log("stopTimer");
+      console.log("stopTimer attempted");
       this.stopTimer();
     }
   }
