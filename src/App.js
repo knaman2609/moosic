@@ -41,15 +41,14 @@ class App extends Component {
   }
 
   runPlayer = () => {
-    var player = document.getElementsByTagName("audio")[0];
-
     if (!this.state.song.name)
       return;
 
     if (!this.state.isPlaying) {
-      player.play();
+      console.log(this.props.player);
+      this.props.player.currentSongData.start();
     } else {
-      player.pause();
+      this.props.player.currentSongData.stop();
     }
 
     this.setState({isPlaying: !this.state.isPlaying});
@@ -92,23 +91,39 @@ class App extends Component {
     this.updateCurrentSong(prevSong , prevSongIndex);
   }
 
-  updateCurrentSong = (song, songIndex) => {
-    var _this = this;
-
+  playSong = (song, songIndex) =>{
     this.setState({
       song: song,
-      isPlaying: false,
+      isPlaying: true,
       currentSongIndex: songIndex,
     });
 
-    setTimeout(function() {
-      _this.runPlayer();
-    },0);
+    this.props._playSong(this.props.player);
+  }
+
+  pauseSong = () =>{
+    this.setState({
+      isPlaying: false,
+    });
+
+    this.props._pauseSong(this.props.player);
+  }
+
+  updateCurrentSong = (song, songIndex) => {
+    var _this = this;
+
+    this.playSong(song, songIndex);
   }
 
   handlePlayListClick = (song, songIndex) => {
-    this.updateCurrentSong(song, songIndex);
+    var _this = this;
+
     this.hidePlayList();
+    var promise = this.props.initSong(this.props.player, song);
+
+    promise.then(function() {
+      _this.updateCurrentSong(song, songIndex);
+    });
   }
 
   renderPlayList() {
@@ -136,17 +151,15 @@ class App extends Component {
             <PlayerControls
               song={this.state.song}
               isPlaying={this.state.isPlaying}
-
               onSongFinished={this.handleSongFinished}
               onMoreClick={this.showPlayList}
-              onPlay={this.runPlayer}
+              onPlay={this.playSong}
+              onPause={this.pauseSong}
               onNext={this.handleNextClick}
               onPrev={this.handlePrevClick}
               />
 
             {this.renderPlayList()}
-
-            <Audio songName={this.state.song.name}/>
           </div>
         </div>
       </div>

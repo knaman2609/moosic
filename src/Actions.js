@@ -1,4 +1,4 @@
-import {getDuration} from "./Utils";
+import {getDuration, renderSongAudio} from "./Utils";
 
 function fetchSongs(dispatch) {
   return function(event){
@@ -40,11 +40,84 @@ function fetchSongs(dispatch) {
         payload: songList
       });
     });
+  };
+}
+
+function initSong(dispatch) {
+  return function(state, song){
+    var promise = renderSongAudio(song.name);
+
+    var resultPromise = new Promise(function(resolve, reject) {
+      promise.then(function(data) {
+        if (state.currentSongData && state.startedAt)
+          state.currentSongData.stop(0);
+
+        if (data.type == "buffer_load") {
+          dispatch({
+            type: "LOAD_SONG",
+            payload: data.source
+          });
+
+          resolve();
+        } else {
+          dispatch({
+            type: "RENDER_SONG",
+            payload: data.source
+          });
+        }
+      });
+    });
+
+    return resultPromise;
+  }
+}
+
+function _playSong(dispatch) {
+  return function(state) {
+    var audioCtx = new AudioContext();
+    var source = audioCtx.createBufferSource();
+    source = audioCtx.createBufferSource();
+	  source.connect(audioCtx.destination);
+	  source.buffer = state.currentSongData.buffer;
+
+    if (state.pausedAt) {
+		  var startedAt = Date.now() - state.pausedAt;
+      source.start(0, state.pausedAt / 1000);
+
+      dispatch({
+        type: "UPDATE_SONG_DATA_PLAY",
+        payload: {startedAt: startedAt, source: source}
+      });
+
+    } else {
+		  var startedAt = Date.now();
+      source.start(0);
+
+      dispatch({
+        type: "UPDATE_SONG_DATA_PLAY",
+        payload: {startedAt: startedAt, source: source}
+      });
+    }
+  }
+}
+
+function _pauseSong(dispatch) {
+  return function(state) {
+    state.currentSongData.stop(0);
+	  var pausedAt = Date.now() - state.startedAt;
+
+    dispatch({
+      type: "UPDATE_SONG_DATA_PAUSE",
+      payload: {pausedAt: pausedAt}
+    });
   }
 }
 
 export default function(dispatch) {
   return {
-    fetchSongs: fetchSongs(dispatch)
+    fetchSongs: fetchSongs(dispatch),
+    initSong: initSong(dispatch),
+    _playSong: _playSong(dispatch),
+    _pauseSong: _pauseSong(dispatch),
   }
 }

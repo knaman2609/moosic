@@ -7,18 +7,14 @@ class PlayerControls extends Component {
   componentWillMount() {
   }
 
-  handlePlayClick = () =>{
-    this.props.onPlay();
-  }
-
   renderPlayIcon = () =>{
     if (this.props.isPlaying) {
       return (
-        <img onClick={this.handlePlayClick} className="PlayIcon" src="ic_pause.png"/>
+        <img onClick={this.props.onPause} className="PlayIcon" src="ic_pause.png"/>
       )
     } else {
       return (
-        <img onClick={this.handlePlayClick} className="PlayIcon" src="ic_play.png"/>
+        <img onClick={this.props.onPlay} className="PlayIcon" src="ic_play.png"/>
       )
     }
   }
