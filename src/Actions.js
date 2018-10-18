@@ -52,19 +52,12 @@ function initSong(dispatch) {
         if (state.currentSongData && state.startedAt)
           state.currentSongData.stop(0);
 
-        if (data.type == "buffer_load") {
           dispatch({
             type: "LOAD_SONG",
-            payload: data.source
+            payload: {data: data, song: song}
           });
 
           resolve();
-        } else {
-          dispatch({
-            type: "RENDER_SONG",
-            payload: data.source
-          });
-        }
       });
     });
 
@@ -73,7 +66,7 @@ function initSong(dispatch) {
 }
 
 function _playSong(dispatch) {
-  return function(state) {
+  return function(state, song) {
     var audioCtx = new AudioContext();
     var source = audioCtx.createBufferSource();
     source = audioCtx.createBufferSource();

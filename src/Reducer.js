@@ -3,7 +3,6 @@ import * as R from "ramda"
 var AppState = {
   songList: [],
   currentSongData: null,
-  renderedSongData: null,
   startedAt: null,
   pausedAt: null,
 }
@@ -20,14 +19,20 @@ const player = (state = AppState , action) => {
     newState.songList = action.payload;
     return R.merge(state, newState);
 
-  case "RENDER_SONG":
-    var newState = {}
-    newState.renderedSongData = action.renderedSongData;
-    return R.merge(state, newState);
-
   case "LOAD_SONG":
-    var newState = {}
-    newState.currentSongData = action.payload;
+    var newState = {};
+    var songList = R.clone(state.songList);
+
+
+    songList.forEach(function(song) {
+      if (song.name == action.payload.song.name) {
+        song.rawSource = action.payload.data.rawSource;
+        song.renderedSource = action.payload.data.renderedSource;
+      }
+    });
+
+    newState.songList = songList;
+    newState.currentSongData = action.payload.data.rawSource;
     newState.startedAt = null;
     newState.pausedAt = null;
 

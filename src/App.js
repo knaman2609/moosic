@@ -45,7 +45,6 @@ class App extends Component {
       return;
 
     if (!this.state.isPlaying) {
-      console.log(this.props.player);
       this.props.player.currentSongData.start();
     } else {
       this.props.player.currentSongData.stop();
@@ -79,6 +78,8 @@ class App extends Component {
     var nextSongIndex = this.state.currentSongIndex + 1;
     var nextSong = this.props.player.songList[nextSongIndex];
 
+    console.log("helo");
+
     if (nextSong)
     this.updateCurrentSong(nextSong , nextSongIndex);
   }
@@ -98,7 +99,7 @@ class App extends Component {
       currentSongIndex: songIndex,
     });
 
-    this.props._playSong(this.props.player);
+    this.props._playSong(this.props.player, song);
   }
 
   pauseSong = () =>{

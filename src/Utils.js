@@ -49,20 +49,24 @@ function renderSongAudio(songName) {
 
       audioCtx.decodeAudioData(audioData, function(buffer) {
         var offlineCtx = new OfflineAudioContext(2,44100*40,44100);
-        var source = offlineCtx.createBufferSource();
+        var rawSource = offlineCtx.createBufferSource();
 
-        source.buffer = buffer;
-        source.connect(offlineCtx.destination);
+        rawSource.buffer = buffer;
+        rawSource.connect(offlineCtx.destination);
 
-        resolve({type: "buffer_load", source: source});
 
         offlineCtx.startRendering().then(function(renderedBuffer) {
           console.log('Rendering completed successfully');
           var audioCtx = new AudioContext();
-          var source = audioCtx.createBufferSource();
+          var renderedSource = audioCtx.createBufferSource();
 
-          source.buffer = renderedBuffer;
-          resolve({type: "buffer_rendered", source: source});
+          renderedSource.buffer = renderedBuffer;
+
+          resolve({
+            rawSource: rawSource,
+            renderedSource: renderedSource
+          });
+
           return;
 
         }).catch(function(err) {
