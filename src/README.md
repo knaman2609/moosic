@@ -1,5 +1,6 @@
 TODO
 
+* Fix SongName
 * PlayPause 
 * Timer Fix
 * Animation
