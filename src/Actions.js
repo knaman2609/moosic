@@ -1,4 +1,5 @@
 import {getDuration, renderSongAudio} from "./Utils";
+import {store} from "./index"
 
 function fetchSongs(dispatch) {
   return function(event){
@@ -44,14 +45,14 @@ function fetchSongs(dispatch) {
 }
 
 function initSong(dispatch) {
-  return function(state, song){
+  return function(song){
+    var state = store.getState();
     var promise = renderSongAudio(song.name);
 
     var resultPromise = new Promise(function(resolve, reject) {
-      promise.then(function(data) {
-        if (state.currentSongData && state.startedAt)
-          state.currentSongData.stop(0);
+      stopCurrentSong(state);
 
+      promise.then(function(data) {
           dispatch({
             type: "LOAD_SONG",
             payload: {data: data, song: song}
@@ -65,10 +66,19 @@ function initSong(dispatch) {
   }
 }
 
+function stopCurrentSong(state) {
+  if (state.currentSongData && state.startedAt)
+    state.currentSongData.stop(0);
+}
+
 function _playSong(dispatch) {
-  return function(state, song) {
+  return function() {
     var audioCtx = new AudioContext();
     var source = audioCtx.createBufferSource();
+    var state = store.getState();
+
+    stopCurrentSong(state);
+
     source = audioCtx.createBufferSource();
 	  source.connect(audioCtx.destination);
 	  source.buffer = state.currentSongData.buffer;
@@ -95,8 +105,11 @@ function _playSong(dispatch) {
 }
 
 function _pauseSong(dispatch) {
-  return function(state) {
-    state.currentSongData.stop(0);
+  return function() {
+    var state = store.getState();
+
+    stopCurrentSong();
+
 	  var pausedAt = Date.now() - state.startedAt;
 
     dispatch({
@@ -106,10 +119,63 @@ function _pauseSong(dispatch) {
   }
 }
 
+function playNextPreviousSong(dispatch, song, songIndex) {
+  if (song) {
+    if (!song.rawSource) {
+      var promise = initSong(dispatch)(song);
+
+      promise.then(function() {
+        var rawSource = store.getState().currentSongData;
+
+        dispatch({
+          type: "UPDATE_CURRENTSONG",
+          payload: {songIndex: songIndex, songData: rawSource}
+        });
+
+        _playSong(dispatch)();
+      });
+
+    } else {
+      stopCurrentSong(store.getState());
+
+      dispatch({
+        type: "UPDATE_CURRENTSONG",
+        payload: {songIndex: songIndex, songData: song.rawSource}
+      });
+
+      _playSong(dispatch)();
+    }
+  }
+}
+
+function playNext(dispatch) {
+  return function() {
+    var state = store.getState();
+    var songIndex = state.currentSongIndex + 1;
+    var song = state.songList[songIndex];
+
+    console.log("next", song);
+    playNextPreviousSong(dispatch, song, songIndex);
+  }
+}
+
+function playPrevious(dispatch) {
+  return function(state) {
+    var state = store.getState();
+    var songIndex = state.currentSongIndex - 1;
+    var song = state.songList[songIndex];
+
+    console.log("prev", song);
+    playNextPreviousSong(dispatch, song, songIndex);
+  }
+}
+
 export default function(dispatch) {
   return {
     fetchSongs: fetchSongs(dispatch),
     initSong: initSong(dispatch),
+    playNext: playNext(dispatch),
+    playPrevious: playPrevious(dispatch),
     _playSong: _playSong(dispatch),
     _pauseSong: _pauseSong(dispatch),
   }

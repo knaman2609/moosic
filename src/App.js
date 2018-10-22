@@ -4,9 +4,7 @@ import { connect } from 'react-redux'
 import PlayerDisplay  from './PlayerDisplay';
 import PlayerControls  from './PlayerControls';
 import PlayList  from './PlayList';
-import Audio  from './Audio';
 import Actions  from './Actions'
-
 
 import './App.css';
 
@@ -40,19 +38,6 @@ class App extends Component {
     this.setState({playListVisible: false});
   }
 
-  runPlayer = () => {
-    if (!this.state.song.name)
-      return;
-
-    if (!this.state.isPlaying) {
-      this.props.player.currentSongData.start();
-    } else {
-      this.props.player.currentSongData.stop();
-    }
-
-    this.setState({isPlaying: !this.state.isPlaying});
-  }
-
   handleFileSelect = (event) => {
     this.props.fetchSongs(event);
 
@@ -75,39 +60,19 @@ class App extends Component {
   }
 
   handleNextClick = () => {
-    var nextSongIndex = this.state.currentSongIndex + 1;
-    var nextSong = this.props.player.songList[nextSongIndex];
-
-    console.log("helo");
-
-    if (nextSong)
-    this.updateCurrentSong(nextSong , nextSongIndex);
+    this.props.playNext();
   }
 
   handlePrevClick = () => {
-    var prevSongIndex = this.state.currentSongIndex - 1;
-    var prevSong = this.props.player.songList[prevSongIndex];
-
-    if (prevSong)
-    this.updateCurrentSong(prevSong , prevSongIndex);
+    this.props.playPrevious();
   }
 
   playSong = (song, songIndex) =>{
-    this.setState({
-      song: song,
-      isPlaying: true,
-      currentSongIndex: songIndex,
-    });
-
-    this.props._playSong(this.props.player, song);
+    this.props._playSong();
   }
 
   pauseSong = () =>{
-    this.setState({
-      isPlaying: false,
-    });
-
-    this.props._pauseSong(this.props.player);
+    this.props._pauseSong();
   }
 
   updateCurrentSong = (song, songIndex) => {
@@ -120,7 +85,7 @@ class App extends Component {
     var _this = this;
 
     this.hidePlayList();
-    var promise = this.props.initSong(this.props.player, song);
+    var promise = this.props.initSong(song);
 
     promise.then(function() {
       _this.updateCurrentSong(song, songIndex);
