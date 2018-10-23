@@ -46,6 +46,8 @@ class App extends Component {
   }
 
   handleSongFinished = () => {
+    return;
+
     var player = document.getElementsByTagName("audio")[0];
     var _this = this;
 
@@ -112,11 +114,11 @@ class App extends Component {
         <div className="MainView">
           <div className="PlayerContainer">
 
-            <PlayerDisplay songName={this.state.song.name}/>
+            <PlayerDisplay songName={this.props.player.currentSong.song.name}/>
 
             <PlayerControls
               song={this.state.song}
-              isPlaying={this.state.isPlaying}
+              isPlaying={this.props.player.isPlaying}
               onSongFinished={this.handleSongFinished}
               onMoreClick={this.showPlayList}
               onPlay={this.playSong}

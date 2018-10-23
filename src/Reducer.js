@@ -2,27 +2,31 @@ import * as R from "ramda"
 
 var AppState = {
   songList: [],
-  currentSongData: null,
-  startedAt: null,
-  pausedAt: null,
-  currentSongIndex: 0
+  currentSong: {
+    song: {},
+    data: null,
+    index: 0,
+    startedAt: null,
+    pausedAt: null,
+  },
+  isPlaying: false
 }
 
 const player = (state = AppState , action) => {
   switch(action.type) {
     case "FETCH_SONGS":
-      var newState = {}
+      var newState = R.clone(state);
       newState.songList = action.payload;
       return R.merge(state, newState);
 
   case "UPDATE_SONGS":
-    var newState = {}
+    var newState = R.clone(state);
     newState.songList = action.payload;
     return R.merge(state, newState);
 
   case "LOAD_SONG":
-    var newState = {};
-    var songList = R.clone(state.songList);
+    var newState = R.clone(state);
+    var songList = newState.songList;
     var songIndex = 0;
 
     songList.forEach(function(song, index) {
@@ -34,30 +38,41 @@ const player = (state = AppState , action) => {
     });
 
     newState.songList = songList;
-    newState.currentSongData = action.payload.data.rawSource;
-    newState.currentSongIndex = songIndex;
-    newState.startedAt = null;
-    newState.pausedAt = null;
+    newState.isPlaying = false;
+    newState.currentSong = {};
+
+    newState.currentSong.song = action.payload.song;
+    newState.currentSong.data = action.payload.data.rawSource;
+    newState.currentSong.index = songIndex;
+    newState.currentSong.startedAt = null;
+    newState.currentSong.pausedAt = null;
 
     return R.merge(state, newState);
 
   case "UPDATE_SONG_DATA_PAUSE":
-    var newState = {}
-    newState.pausedAt = action.payload.pausedAt;
+    var newState = R.clone(state);
+
+    newState.isPlaying = false;
+    newState.currentSong.pausedAt = action.payload.pausedAt;
     return R.merge(state, newState);
 
   case "UPDATE_SONG_DATA_PLAY":
-    var newState = {}
-    newState.currentSongData = action.payload.source;
-    newState.startedAt = action.payload.startedAt;
+    var newState = R.clone(state);
+
+    newState.isPlaying = true;
+    newState.currentSong.data = action.payload.source;
+    newState.currentSong.startedAt = action.payload.startedAt;
     return R.merge(state, newState);
 
   case "UPDATE_CURRENTSONG":
-    var newState = {}
-    newState.currentSongIndex = action.payload.songIndex;
-    newState.currentSongData = action.payload.songData;
-    newState.startedAt = null;
-    newState.pausedAt = null;
+    var newState = R.clone(state);
+
+    newState.isPlaying = false;
+    newState.currentSong.song = action.payload.song;
+    newState.currentSong.index = action.payload.songIndex;
+    newState.currentSong.data = action.payload.songData;
+    newState.currentSong.startedAt = null;
+    newState.currentSong.pausedAt = null;
 
     return R.merge(state, newState);
   }

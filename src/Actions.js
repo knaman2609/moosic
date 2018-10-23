@@ -67,8 +67,9 @@ function initSong(dispatch) {
 }
 
 function stopCurrentSong(state) {
-  if (state.currentSongData && state.startedAt)
-    state.currentSongData.stop(0);
+
+  if (state.currentSong.data && state.currentSong.startedAt)
+    state.currentSong.data.stop(0);
 }
 
 function _playSong(dispatch) {
@@ -81,11 +82,11 @@ function _playSong(dispatch) {
 
     source = audioCtx.createBufferSource();
 	  source.connect(audioCtx.destination);
-	  source.buffer = state.currentSongData.buffer;
+	  source.buffer = state.currentSong.data.buffer;
 
-    if (state.pausedAt) {
-		  var startedAt = Date.now() - state.pausedAt;
-      source.start(0, state.pausedAt / 1000);
+    if (state.currentSong.pausedAt) {
+		  var startedAt = Date.now() - state.currentSong.pausedAt;
+      source.start(0, state.currentSong.pausedAt / 1000);
 
       dispatch({
         type: "UPDATE_SONG_DATA_PLAY",
@@ -107,10 +108,11 @@ function _playSong(dispatch) {
 function _pauseSong(dispatch) {
   return function() {
     var state = store.getState();
+    console.log("pausing....");
 
-    stopCurrentSong();
+    stopCurrentSong(state);
 
-	  var pausedAt = Date.now() - state.startedAt;
+	  var pausedAt = Date.now() - state.currentSong.startedAt;
 
     dispatch({
       type: "UPDATE_SONG_DATA_PAUSE",
@@ -125,11 +127,11 @@ function playNextPreviousSong(dispatch, song, songIndex) {
       var promise = initSong(dispatch)(song);
 
       promise.then(function() {
-        var rawSource = store.getState().currentSongData;
+        var rawSource = store.getState().currentSong.data;
 
         dispatch({
           type: "UPDATE_CURRENTSONG",
-          payload: {songIndex: songIndex, songData: rawSource}
+          payload: {songIndex: songIndex, songData: rawSource, song: song}
         });
 
         _playSong(dispatch)();
@@ -140,7 +142,7 @@ function playNextPreviousSong(dispatch, song, songIndex) {
 
       dispatch({
         type: "UPDATE_CURRENTSONG",
-        payload: {songIndex: songIndex, songData: song.rawSource}
+        payload: {songIndex: songIndex, songData: song.rawSource, song: song}
       });
 
       _playSong(dispatch)();
@@ -151,7 +153,7 @@ function playNextPreviousSong(dispatch, song, songIndex) {
 function playNext(dispatch) {
   return function() {
     var state = store.getState();
-    var songIndex = state.currentSongIndex + 1;
+    var songIndex = state.currentSong.index + 1;
     var song = state.songList[songIndex];
 
     console.log("next", song);
@@ -162,7 +164,7 @@ function playNext(dispatch) {
 function playPrevious(dispatch) {
   return function(state) {
     var state = store.getState();
-    var songIndex = state.currentSongIndex - 1;
+    var songIndex = state.currentSong.index - 1;
     var song = state.songList[songIndex];
 
     console.log("prev", song);

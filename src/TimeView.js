@@ -41,6 +41,8 @@ class TimeView extends Component {
   }
 
   startTimer() {
+    return;
+
     if (this.timerId)
       return;
 
